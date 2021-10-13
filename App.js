@@ -7,9 +7,9 @@
  */
 
 import * as React from 'react';
-import HomeScreen from './screens/HomeScreen';
+import SignedInStack from './navigation';
 
 const App = () => {
-  return <HomeScreen />;
+  return <SignedInStack />;
 };
 export default App;
