@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {Divider} from 'react-native-paper';
+import {firebase, db} from '../../firebase';
 
 export const bottomTabIcons = [
   {
@@ -35,13 +36,48 @@ export const bottomTabIcons = [
   },
 ];
 
-const BottomTabs = ({icons}) => {
-  const [activeTab, setActiveTab] = useState('Home');
+const BottomTabs = ({icons, navigation, screen}) => {
+  const [currentLoggedInUser, setCurrentLoggedInUser] = useState(null);
 
+  const getUserName = async () => {
+    const user = await firebase.auth().currentUser;
+    const unsubscribe = await db
+      .collection('users')
+      .where('owner_uid', '==', user.uid)
+      .limit(1)
+      .onSnapshot(snapshot =>
+        snapshot.docs.map(doc => {
+          setCurrentLoggedInUser({
+            username: doc.data().username,
+            profilePicture: doc.data().profile_picture,
+          });
+        }),
+      );
+    return unsubscribe;
+  };
+
+  useEffect(() => {
+    setActiveTab(screen);
+    getUserName();
+  }, []);
+
+  const [activeTab, setActiveTab] = useState('Home');
   const Icon = ({icon}) => (
-    <TouchableOpacity onPress={() => setActiveTab(icon.name)}>
+    <TouchableOpacity
+      onPress={() => {
+        setActiveTab(icon.name);
+        if (icon.name === 'Home') {
+          navigation.navigate('HomeScreen');
+        } else if (icon.name === 'Profile') {
+          navigation.navigate('ProfileScreen');
+        }
+      }}>
       <Image
-        source={{uri: activeTab === icon.name ? icon.active : icon.inactive}}
+        source={
+          icon.name === 'Profile' && currentLoggedInUser
+            ? {uri: currentLoggedInUser.profilePicture}
+            : {uri: activeTab === icon.name ? icon.active : icon.inactive}
+        }
         style={[
           styles.icon,
           icon.name === 'Profile' ? styles.profilePic() : null,

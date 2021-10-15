@@ -7,9 +7,9 @@
  */
 
 import * as React from 'react';
-import SignedInStack from './navigation';
+import AuthNavigation from './AuthNavigation';
 
 const App = () => {
-  return <SignedInStack />;
+  return <AuthNavigation />;
 };
 export default App;

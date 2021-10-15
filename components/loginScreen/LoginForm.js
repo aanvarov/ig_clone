@@ -6,11 +6,14 @@ import {
   StyleSheet,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import Validator from 'email-validator';
+
+import {firebase} from '../../firebase';
 
 const LoginForm = ({navigation}) => {
   const LoginFormSchema = Yup.object().shape({
@@ -20,11 +23,22 @@ const LoginForm = ({navigation}) => {
       .min(6, 'Your password has to have at least 6 characters'),
   });
 
+  const onLogin = async (email, password) => {
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      console.log('you are signed in successfully', email, password);
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
   return (
     <View style={styles.wrapper}>
       <Formik
         initialValues={{email: '', password: ''}}
-        onSubmit={values => console.log(values)}
+        onSubmit={values => {
+          onLogin(values.email, values.password);
+        }}
         validationSchema={LoginFormSchema}
         validateOnMount={true}>
         {({handleChange, handleBlur, handleSubmit, values, isValid}) => (
