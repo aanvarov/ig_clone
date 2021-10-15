@@ -6,7 +6,7 @@ import BottomTabs, {bottomTabIcons} from '../components/home/BottomTabs';
 
 const ProfileScreen = ({navigation}) => {
   const [profilePic, setProfilePic] = useState(
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWeZj1SB4KzSbjx_oKlZpyrOLlEL9K9DW0JA&usqp=CAU',
+    'https://instagram.fhrk1-1.fna.fbcdn.net/v/t51.2885-19/s150x150/56352796_2311835385697396_6992972636456222720_n.jpg?_nc_ht=instagram.fhrk1-1.fna.fbcdn.net&_nc_ohc=8X9BcyNbC3sAX_Q8GwJ&edm=ABfd0MgBAAAA&ccb=7-4&oh=fd5c22aa9a1cdfc3a302c2e77946f7a8&oe=61704BA9&_nc_sid=7bff83',
   );
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
